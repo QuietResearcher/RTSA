@@ -199,6 +199,8 @@ RTSA <-
       stop("Provide expected `timing` for design.")
     }
 
+    print(paste0("The value of fixed at point 0 is: ", fixed))
+    
     # if design is present
     if(!is.null(design)){
       outcome <- design$settings$outcome
@@ -325,6 +327,8 @@ RTSA <-
       }
     }
 
+    print(paste0("The value of fixed at point 1 is: ", fixed))
+
     argg <- c(as.list(environment()), list(...))
 
     # helper functions
@@ -381,6 +385,8 @@ RTSA <-
                            org_data$nC[!(org_data$eI + org_data$eC == 0)])
       warning("NB. All zero-event studies (no events in both arms) are removed. Consider changing the outcome to risk difference (RD) to keep the studies in the analysis.")
       }
+
+      print(paste0("The value of fixed at point 2 is: ", fixed))
 
       # Calculate the RIS
       if (outcome %in% c("RR", "OR")) {
@@ -561,6 +567,8 @@ RTSA <-
         }
       }
     }
+
+    print(paste0("The value of fixed at point 3 is: ", fixed))
 
     # calculate boundaries for design
     war_ana <- NULL
