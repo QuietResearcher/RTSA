@@ -419,6 +419,8 @@ RTSA <-
         }
       }
 
+      print(paste0("The value of fixed at point 2-1 is: ", fixed))
+      
       mc <- ifelse(!is.null(design),design$settings$mc,mc)
 
       if (outcome == "RR") {
@@ -477,6 +479,8 @@ RTSA <-
           trials = trials
         )
       }
+
+      print(paste0("The value of fixed at point 2-2 is: ", fixed))
         
       if((sy$U[1] == 0 & (is.null(tau2) & is.null(I2) & is.null(D2))) | fixed | (!is.null(outris$war_het) & random_adj == "tau2" & is.null(outris$NR_tau))){
         RIS = outris$NF$NF_full
@@ -550,6 +554,8 @@ RTSA <-
           trials = trials
         )
       }
+
+      print(paste0("The value of fixed at point 2-3 is: ", fixed))
 
       if(fixed == TRUE){
         RIS = outris$NF
