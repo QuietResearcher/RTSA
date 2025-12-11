@@ -487,7 +487,7 @@ RTSA <-
         if(sy$U[1] != 0 & !fixed){
           warning("NB. There is some heterogeneity present in the data, but it was not picked up by the sample size calculating. Consider changing random_adj to D2 or I2.")
         }
-        fixed = TRUE
+        # fixed = TRUE
       } else {
         if(random_adj == "D2"){ 
           warning("NB. The required information size adjusted by Diversity (D^2). This might cause an under-powered analysis. Consider changing the argument `random_adj` from `D2` (default) to `tau2`.")
@@ -827,7 +827,7 @@ RTSA <-
         ana_times = ana_times,
         org_timing = orgTiming,
         ma = ma,
-        fixed = ifelse(!is.null(design), design$settings$fixed, fixed),
+        fixed = fixed,
         inf_type = inf_type,
         conf_level = conf_level,
         final_analysis = final_analysis
