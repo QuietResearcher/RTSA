@@ -554,7 +554,9 @@ z_n_w <- function(r, info, za, zb, i, delta){
   xi <- delta*info$sd_incr[i]+(j < r)*(-3-4*log(r/j)) +
     (r <= j & j <= 5*r)*(-3+3*(j-r)/(2*r))+ (5*r < j)*(3+4*log(r/(6*r-j)))
 
+  print("------ THE VALUE OF za[i] is: ------"
   print(za[i])
+  print("------ THE VALUE OF xi is: ------"
   print(xi)
   
   if(sum(xi < za[i]) > 0){
