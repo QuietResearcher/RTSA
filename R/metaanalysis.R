@@ -346,29 +346,62 @@ metaPrepare <-
 
     #Prepare dichotomous outcomes.
     if (outcome %in% c("OR", "RR", "RD")) {
-      # Remove studies with zero total events.
-      if (sum(data$eI == 0 & data$eC == 0) > 0) {
-        nonevent <- which(data$eI == 0 & data$eC == 0)
-        data <- data[-nonevent, ]
-      } else {
-        nonevent <- NULL
-      }
+      # # Remove studies with zero total events.
+      # if (sum(data$eI == 0 & data$eC == 0) > 0) {
+      #   nonevent <- which(data$eI == 0 & data$eC == 0)
+      #   data <- data[-nonevent, ]
+      # } else {
+      #   nonevent <- NULL
+      # }
 
-      # if some has all events
-      if (sum(data$eI == data$nI & data$eC == data$nC) > 0 & outcome %in% c("OR", "RR")) {
-        allevent <- which(data$eI == data$nI & data$eC == data$nC)
-        data <- data[-allevent, ]
-      } else {
-        allevent <- NULL
-      }
+      # # if some has all events
+      # if (sum(data$eI == data$nI & data$eC == data$nC) > 0 & outcome %in% c("OR", "RR")) {
+      #   allevent <- which(data$eI == data$nI & data$eC == data$nC)
+      #   data <- data[-allevent, ]
+      # } else {
+      #   allevent <- NULL
+      # }
       
-      # Adding 0.5 if one of the event counts is zero
+      # # Adding 0.5 if one of the event counts is zero
+      # if (sum(data$eI == 0 | data$eC == 0) > 0) {
+      #   zc <- which(data$eI == 0 | data$eC == 0)
+      #   data$eI[zc] <- data$eI[zc] + zero_adj
+      #   data$nI[zc] <- data$nI[zc] + 2*zero_adj
+      #   data$eC[zc] <- data$eC[zc] + zero_adj
+      #   data$nC[zc] <- data$nC[zc] + 2*zero_adj
+      # }
+
+      # TACC Implementation (Sweeting et al., 2004)
+      # m = 1 (Total correction factor for events sums to 1)
+      
       if (sum(data$eI == 0 | data$eC == 0) > 0) {
+
+        print("TACC Triggered!")
+        
+        # Identify rows with zero events in either arm
         zc <- which(data$eI == 0 | data$eC == 0)
-        data$eI[zc] <- data$eI[zc] + zero_adj
-        data$nI[zc] <- data$nI[zc] + 2*zero_adj
-        data$eC[zc] <- data$eC[zc] + zero_adj
-        data$nC[zc] <- data$nC[zc] + 2*zero_adj
+        
+        # Define the m factor (total correction to be distributed)
+        m <- 1
+        
+        # Calculate total N for the zero-event studies
+        total_n <- data$nI[zc] + data$nC[zc]
+        
+        # Calculate proportional corrections (k)
+        # Instead of 0.5 everywhere, the arm with more patients gets a larger correction
+        k_I <- m * (data$nI[zc] / total_n)
+        k_C <- m * (data$nC[zc] / total_n)
+        
+        # Apply corrections
+        # 1. Add k factor to events
+        data$eI[zc] <- data$eI[zc] + k_I
+        data$eC[zc] <- data$eC[zc] + k_C
+        
+        # 2. Add 2*k to total N
+        # (Because continuity corrections are added to both 'events' and 'non-events',
+        # the total sample size increases by 2x the correction factor)
+        data$nI[zc] <- data$nI[zc] + (2 * k_I)
+        data$nC[zc] <- data$nC[zc] + (2 * k_C)
       }
 
       # Calculate event probability
