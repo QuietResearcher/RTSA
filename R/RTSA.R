@@ -662,7 +662,7 @@ RTSA <-
             trials[, 1] - c(0, trials[, 1][-length(trials[, 1])])
           trials <- matrix(trials[trials[, 2] > time_tf, ], ncol = 3, byrow = F)
         } else {
-          stop("There is less than 1% information available for the entire Trial Sequential Analysis (TSA). Hence there is not enough information in the data to make the analysis.")
+          # stop("There is less than 1% information available for the entire Trial Sequential Analysis (TSA). Hence there is not enough information in the data to make the analysis.")
         }
       }
       
