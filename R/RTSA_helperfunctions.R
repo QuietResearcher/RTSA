@@ -500,6 +500,8 @@ beta_boundary <- function(inf_frac, beta, side, alpha_boundaries,
 
     if (!is.na(beta_spend$as_incr[i])) {
       beta_spend$as_incr[i] <- max(0, min(1, beta_spend$as_incr[i]))
+    } else {
+      beta_spend$as_incr[i] <- 0
     }
     # if(beta_spend$as_incr[i] <= 0 || beta_spend$as_incr[i] >= 1){
     #   beta_spend$as_incr[i] <- min(c(1, beta_spend$as_incr[i]))
