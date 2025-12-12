@@ -855,12 +855,16 @@ boundaries <- function(timing, alpha = 0.05, zninf = -20, beta = 0.1, side = 2,
         boundout$beta_lbound <- c(rep(NA,sum(abs(lb$za) == 20)), -lb$za[abs(lb$za) < 20])
 
         if(!(sum(is.na(boundout$beta_ubound)) == length(boundout$beta_ubound))){
-          if(boundout$beta_ubound[length(boundout$alpha_ubound)] >
-             boundout$alpha_ubound[length(boundout$alpha_ubound)]){
-            boundout$beta_ubound[length(boundout$alpha_ubound)] =
-              boundout$alpha_ubound[length(boundout$alpha_ubound)]
-            boundout$beta_lbound[length(boundout$alpha_ubound)] =
-              boundout$alpha_lbound[length(boundout$alpha_ubound)]
+          
+           last_idx <- length(boundout$alpha_ubound)
+
+           # REASONABLE VALUE FIX:
+           # Treat NA at the final analysis as a signal to close the boundaries
+           if(is.na(boundout$beta_ubound[last_idx]) || 
+              boundout$beta_ubound[last_idx] > boundout$alpha_ubound[last_idx]){
+             
+            boundout$beta_ubound[last_idx] = boundout$alpha_ubound[last_idx]
+            boundout$beta_lbound[last_idx] = boundout$alpha_lbound[last_idx]
           }
         }
 
