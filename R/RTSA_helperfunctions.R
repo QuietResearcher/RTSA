@@ -547,13 +547,16 @@ beta_boundary <- function(inf_frac, beta, side, alpha_boundaries,
 z_n_w <- function(r, info, za, zb, i, delta){
 
   if(is.na(za[i])){
-    za[i] <- 0
+    za[i] <- -20
   }
   
   j <- 1:(6*r-1)
   xi <- delta*info$sd_incr[i]+(j < r)*(-3-4*log(r/j)) +
     (r <= j & j <= 5*r)*(-3+3*(j-r)/(2*r))+ (5*r < j)*(3+4*log(r/(6*r-j)))
 
+  print(za[i])
+  print(xi)
+  
   if(sum(xi < za[i]) > 0){
     indi <- max(which(xi < za[i]))
     xi <- xi[indi:length(xi)]
