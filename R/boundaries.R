@@ -497,13 +497,17 @@ boundaries <- function(timing, alpha = 0.05, zninf = -20, beta = 0.1, side = 2,
         boundout$beta_ubound <- c(rep(NA,sum(abs(lb$za) == 20)), lb$za[abs(lb$za) < 20])
         boundout$beta_lbound <- c(rep(NA,sum(abs(lb$za) == 20)), -lb$za[abs(lb$za) < 20])
 
-
-        if(boundout$beta_ubound[length(boundout$alpha_ubound)] >
-           boundout$alpha_ubound[length(boundout$alpha_ubound)]){
-          boundout$beta_ubound[length(boundout$alpha_ubound)] =
-            boundout$alpha_ubound[length(boundout$alpha_ubound)]
-          boundout$beta_lbound[length(boundout$alpha_ubound)] =
-            boundout$alpha_lbound[length(boundout$alpha_ubound)]
+        # Get the index of the final analysis
+        last_idx <- length(boundout$alpha_ubound)
+        
+        # REASONABLE VALUE FIX:
+        # If the final Beta bound is NA, we impute it as the Alpha bound (closing the trial).
+        # Or, if it exists and is greater than Alpha, we clamp it.
+        if(is.na(boundout$beta_ubound[last_idx]) || 
+           boundout$beta_ubound[last_idx] > boundout$alpha_ubound[last_idx]){
+          
+          boundout$beta_ubound[last_idx] = boundout$alpha_ubound[last_idx]
+          boundout$beta_lbound[last_idx] = boundout$alpha_lbound[last_idx]
         }
         
         boundout$beta_spend <- list(bs_incr = lb$as_incr, bs_cum = lb$as_cum)
