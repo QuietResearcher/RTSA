@@ -497,10 +497,14 @@ beta_boundary <- function(inf_frac, beta, side, alpha_boundaries,
     if(i == 2){
       last <- init_int(wj = wj, zj = zj, delta = delta, stdv = info$sd_incr)
     }
-    if(beta_spend$as_incr[i] <= 0 || beta_spend$as_incr[i] >= 1){
-      beta_spend$as_incr[i] <- min(c(1, beta_spend$as_incr[i]))
-      beta_spend$as_incr[i] <- max(c(0, beta_spend$as_incr[i]))
+
+    if (!is.na(beta_spend$as_incr[i])) {
+      beta_spend$as_incr[i] <- max(0, min(1, beta_spend$as_incr[i]))
     }
+    # if(beta_spend$as_incr[i] <= 0 || beta_spend$as_incr[i] >= 1){
+    #   beta_spend$as_incr[i] <- min(c(1, beta_spend$as_incr[i]))
+    #   beta_spend$as_incr[i] <- max(c(0, beta_spend$as_incr[i]))
+    # }
     if(beta_spend$as_incr[i] < tol){
       za[i] <- zninf
       ya[i] <- za[i]*info$sd_incr[i]
